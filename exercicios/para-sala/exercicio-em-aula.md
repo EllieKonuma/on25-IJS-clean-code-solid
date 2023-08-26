@@ -1,107 +1,135 @@
 ## 10.0 Atividades
+
 ### Atividades também no notion da aula
 
 1. Considere a classe abaixo:
-```
+
+```js
 class Product {
+  name;
+  price;
+  unit;
 
-    constructor(name, price, unit){
-        this.name = name;
-        this.unit = unit;
+  constructor(name, price, unit) {
+    this.name = name;
+    this.price = price;
+    this.unit = unit;
+  }
+
+  showDetails() {
+    return `name: ${this.name}\nprice: ${this.price}\nunit: ${this.unit}`;
+  }
+
+  removeUnit(quantity) {
+    this.unit -= quantity;
+    return this.unit;
+  }
+}
+
+class Client {
+  name;
+  cart = [];
+  constructor(name) {
+    this.name = name;
+  }
+
+  addToCart(product, quantity) {
+    if (typeof quantity === "string" || typeof quantity === "boolean") {
+      throw new Error("Não é possível depositar valores não numéricos");
+    } else if (product.unit == 0) {
+      throw new Error("Não temos mais desse produto");
     }
 
-    showDetails() {
-        console.log("Mostro meus detalhes");
-    }
+    this.cart.push({ product, quantity });
 
-    addToCart(quantity) {
-        console.log(`Adiciono ${quantity} ${unit} ao carrinho`);
-    }
+    console.log(`Adicionado ${product} ${quantity} ao carrinho`);
+  }
+  buyItem(nameItem) {
+    //colocar verificadores e chamar removeUnit do item
+    "...";
+  }
 }
 ```
+
 Refatore-a de maneira a respeitar o princípio da Responsabilidade Única. Crie outras classes se necessário.
 
 2. Considere o código (em Typescript) abaixo:
-```
+
+```ts
 export enum ResourceType {
-    TIME_SLOT,
-    SPACE_SLOT
+  TIME_SLOT,
+  SPACE_SLOT,
 }
 
 class Resource {
-    id: number;
-    type: ResourceType;
+  id: number;
+  type: ResourceType;
 
-    constructor(id: number, type: ResourceType) {
-      this.id = id;
-      this.type = type;
-    }
+  constructor(id: number, type: ResourceType) {
+    this.id = id;
+    this.type = type;
+  }
 }
 
-class ResourceAllocator {    
-  
-    allocate(resource: Resource) {
-        switch (resource.type) {
-            case ResourceType.TIME_SLOT:
-                this.findFreeTimeSlot();
-                this.markTimeSlotBusy(resource.id);
-                break;
-            case ResourceType.SPACE_SLOT:
-                this.findFreeSpaceSlot();
-                this.markSpaceSlotBusy(resource.id);
-                break;
-            default:
-                throw new Error("ERROR: Attempted to allocate invalid resource");
-        }
+class ResourceAllocator {
+  allocate(resource: Resource) {
+    switch (resource.type) {
+      case ResourceType.TIME_SLOT:
+        this.findFreeTimeSlot();
+        this.markTimeSlotBusy(resource.id);
+        break;
+      case ResourceType.SPACE_SLOT:
+        this.findFreeSpaceSlot();
+        this.markSpaceSlotBusy(resource.id);
+        break;
+      default:
+        throw new Error("ERROR: Attempted to allocate invalid resource");
     }
+  }
 
-    free(resource: Resource) {
-        switch (resource.type) {
-            case ResourceType.TIME_SLOT:
-                this.markTimeSlotFree(resource.id);
-                break;
-            case ResourceType.SPACE_SLOT:
-                this.markSpaceSlotFree(resource.id);
-                break;
-            default:
-                throw new Error("ERROR: attempted to free invalid resource");
-        }
+  free(resource: Resource) {
+    switch (resource.type) {
+      case ResourceType.TIME_SLOT:
+        this.markTimeSlotFree(resource.id);
+        break;
+      case ResourceType.SPACE_SLOT:
+        this.markSpaceSlotFree(resource.id);
+        break;
+      default:
+        throw new Error("ERROR: attempted to free invalid resource");
     }
+  }
 
-    private findFreeSpaceSlot()
-    {
-        console.log("Encontrei um espaço livre");
-    }
+  private findFreeSpaceSlot() {
+    console.log("Encontrei um espaço livre");
+  }
 
-    private findFreeTimeSlot()
-    {
-        console.log("Encontrei um tempo livre");
-    }
+  private findFreeTimeSlot() {
+    console.log("Encontrei um tempo livre");
+  }
 
-    private markSpaceSlotFree(resourceId: number)
-    {
-        console.log("Encontrei um espaço ocupado");
-    }
+  private markSpaceSlotFree(resourceId: number) {
+    console.log("Encontrei um espaço ocupado");
+  }
 
-    private markTimeSlotFree(resourceId: number)
-    {
-        console.log("Liberei um tempo ocupado");
-    }
+  private markTimeSlotFree(resourceId: number) {
+    console.log("Liberei um tempo ocupado");
+  }
 
-    private markSpaceSlotBusy(resourceId: number)
-    {
-        console.log("Ocupei um espaço livre");
-    }
+  private markSpaceSlotBusy(resourceId: number) {
+    console.log("Ocupei um espaço livre");
+  }
 
-    private markTimeSlotBusy(resourceId: number)
-    {
-        console.log("Ocupei um tempo livre");
-    }
+  private markTimeSlotBusy(resourceId: number) {
+    console.log("Ocupei um tempo livre");
+  }
 }
 ```
+
 Refatore o código de maneira a respeitar o princípio Aberto-Fechado. Crie outras classes se necessário.
 
 3. Considere o código (em Typescript) abaixo
+
 ```
 class Duck {
     quack() {
@@ -174,9 +202,11 @@ class Pool {
 const pool = new Pool();
 pool.run();
 ```
-Refatore o código de maneira a respeitar o princípio da Substituição de Liskov. Crie outras classes se  necessário.
+
+Refatore o código de maneira a respeitar o princípio da Substituição de Liskov. Crie outras classes se necessário.
 
 4. Considere o código (em Typescript) abaixo
+
 ```
 interface Worker
 {
@@ -199,12 +229,12 @@ class Human extends Worker
 
 class Robot extends Worker
 {
-    work() : String 
+    work() : String
     {
         return "Robot works";
     }
 
-    eat() : String 
+    eat() : String
     {
         throw new Error("Robot can't eat");
     }
@@ -242,9 +272,11 @@ class Factory
     }
 }
 ```
-Refatore o código de maneira a respeitar o princípio da Segregação de Interface. Crie outras classes se  necessário.
+
+Refatore o código de maneira a respeitar o princípio da Segregação de Interface. Crie outras classes se necessário.
 
 5. Considere o código (em Typescript) abaixo
+
 ```
 class Lamp
 {
@@ -298,4 +330,5 @@ class Button
     }
 }
 ```
-Refatore o código de maneira a respeitar o princípio da Inversão de Dependência. Crie outras classes se  necessário.
+
+Refatore o código de maneira a respeitar o princípio da Inversão de Dependência. Crie outras classes se necessário.
